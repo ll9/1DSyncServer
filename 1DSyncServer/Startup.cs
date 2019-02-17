@@ -28,7 +28,7 @@ namespace _1DSyncServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Soure=db.sqlite"));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=db.sqlite"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -34,18 +34,18 @@ namespace _1DSyncServer.Controllers
         {
             foreach (var entity in entities)
             {
-                var created = entity.LastModified == null;
                 entity.LastModified = DateTime.Now;
 
-                if (created)
-                {
-                    _context.PseudoDynamicEntities.Add(entity);
-                }
-                else
+                if (_context.PseudoDynamicEntities.Any(e => e.Id == entity.Id))
                 {
                     _context.Entry(entity).State = EntityState.Modified;
                 }
+                else
+                {
+                    _context.PseudoDynamicEntities.Add(entity);
+                }
             }
+            _context.SaveChanges();
 
             if (lastModified == null)
             {
