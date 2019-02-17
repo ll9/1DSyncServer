@@ -53,8 +53,8 @@ namespace _1DSyncServer.Controllers
             }
             else
             {
-                var entriesSinceLastSync = _context.PseudoDynamicEntities.Where(e => e.LastModified > lastModified);
-                return _context.PseudoDynamicEntities;
+                var entriesSinceLastSync = _context.PseudoDynamicEntities.Where(e => Nullable.Compare(e.LastModified, lastModified) > 0);
+                return entriesSinceLastSync;
             }
         }
 
