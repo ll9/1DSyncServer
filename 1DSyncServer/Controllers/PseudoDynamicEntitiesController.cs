@@ -28,6 +28,36 @@ namespace _1DSyncServer.Controllers
             return _context.PseudoDynamicEntities;
         }
 
+        // GET: api/PseudoDynamicEntities/synchronize
+        [HttpPost("synchronize")]
+        public IEnumerable<PseudoDynamicEntity> Synchronize(IEnumerable<PseudoDynamicEntity> entities, [FromQuery(Name = "lastModified")] DateTime? lastModified)
+        {
+            foreach (var entity in entities)
+            {
+                var created = entity.LastModified == null;
+                entity.LastModified = DateTime.Now;
+
+                if (created)
+                {
+                    _context.PseudoDynamicEntities.Add(entity);
+                }
+                else
+                {
+                    _context.Entry(entity).State = EntityState.Modified;
+                }
+            }
+
+            if (lastModified == null)
+            {
+                return _context.PseudoDynamicEntities;
+            }
+            else
+            {
+                var entriesSinceLastSync = _context.PseudoDynamicEntities.Where(e => e.LastModified > lastModified);
+                return _context.PseudoDynamicEntities;
+            }
+        }
+
         // GET: api/PseudoDynamicEntities/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPseudoDynamicEntity([FromRoute] string id)
